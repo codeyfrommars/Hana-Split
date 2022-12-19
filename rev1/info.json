@@ -1,0 +1,11 @@
+{
+    "keyboard_name": "Hana", 
+    "manufacturer": "codeyfrommars",
+    "url": "", 
+    "maintainer": "codeyfrommars", 
+    "usb": {
+        "vid": "0x04D9",
+        "pid": "0xEB2E",
+        "device_version": "1.0.0"
+    },
+}
