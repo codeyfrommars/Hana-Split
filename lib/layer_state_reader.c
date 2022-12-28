@@ -18,14 +18,14 @@ const char *read_layer_state(void) {
     snprintf(layer_state_str, sizeof(layer_state_str), "LAYERBase ");
     break;
   case L_RAISE:
-    snprintf(layer_state_str, sizeof(layer_state_str), "LAYERFn   ");
+    snprintf(layer_state_str, sizeof(layer_state_str), "LAYERSym   ");
     break;
   case L_LOWER:
-    snprintf(layer_state_str, sizeof(layer_state_str), "LAYERMod  ");
+    snprintf(layer_state_str, sizeof(layer_state_str), "LAYERNav  ");
     break;
   case L_ADJUST:
   case L_ADJUST_TRI:
-    snprintf(layer_state_str, sizeof(layer_state_str), "LAYERMedia");
+    snprintf(layer_state_str, sizeof(layer_state_str), "LAYERMacro");
     break;
   default:
     snprintf(layer_state_str, sizeof(layer_state_str), "LAYERUndef-%u", layer_state);

@@ -7,7 +7,31 @@ enum layer_number {
   _QWERTY = 0,
   _NAV,
   _SYM,
-  _MEDIA
+  _MACRO
+};
+
+//Tap Dance Declarations
+enum {
+  TD_ALT_CTL = 0
+};
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  //Tap once for Alt, twice for Ctl
+  [TD_ALT_CTL]  = ACTION_TAP_DANCE_DOUBLE(KC_LALT, KC_LCTL)
+// Other declarations would go here, separated by commas, if you have them
+};
+
+// Macro Declarations
+enum {
+  MAC_SSHOT = SAFE_RANGE, // win+shift+s
+  MAC_PRN, // ()
+  MAC_CBR, // {}
+  MAC_BRC, // []
+  MAC_ABK, // <>
+  MAC_PASTE, // "0p
+  MAC_CADEL, // ctrl+alt+del
+  MAC_ALTF4, // alt+f4
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -22,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |                    |   N  |   M  |   ,  |   .  |   /  |RShift|
  * `-----------------------------------------/                    \-----------------------------------------'
- *                   | LAlt | SYM  |BackSP| /                      \  |Space | SYM  | Esc  |
+ *                   |Alt/Ct| SYM  |BackSP| /                      \  |Space | SYM  | Esc  |
  *                   |      |      |      |/                        \ |      |      |      |
  *                   `---------------------                          ''--------------------'
  */
@@ -32,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   MT(MOD_LCTL, KC_TAB),   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   MO(_NAV),  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                    KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, MO(_NAV),
   KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-                          KC_LALT, MO(_SYM), KC_BSPC,                     KC_SPC, MO(_SYM), KC_ESC
+                          TD(TD_ALT_CTL), MO(_SYM), LT(0,KC_BSPC),                     KC_SPC, MO(_SYM), KC_ESC
 ),
 /* NAV
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -56,52 +80,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                              KC_MUTE, _______,  KC_DEL,                    KC_ENT, _______, _______
 ),
 /* SYM 
+ * ^&*<>!@#$%_-+=\|/?
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  |  F10 | F11  | F12  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |  `   |  1   |  2   |  3   |  4   |  5   |                    |  6   |  7   |  8   |  9   |  0   |      |
+ * |      |  <   |  >   |  {   |   }  |      |                    |   +  |  7   |  8   |  9   |  -   |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |  ^   |  &   |  *   |  <   |  >   |                    |  [   |  (   |  {   |  _   |  +   |      |
+ * |      |  [   |  ]   |  (   |   )  |      |                    |   =  |  4   |  5   |  6   |  _   |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |  !   |  @   |  #   |  $   |  %   |                    |  ]   |  )   |  }   |  -   |  =   |      |
+ * |      |      |      |      |      |      |                    |      |  1   |  2   |  3   |      |      |
  * `-----------------------------------------/                    \-----------------------------------------'
- *                   | LGUI |      |      | /                      \  |ENTER |      |      |
+ *                   | LGUI |      |      | /                      \  |      |      |  0   |
  *                   |      |      |      |/                        \ |      |      |      |
  *                   `---------------------                          ''--------------------'
  */
 [_SYM] = LAYOUT(
     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9, KC_F10,  KC_F11,  KC_F12,
-   KC_GRV,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,   KC_9,    KC_0, _______,
-  _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_LABK, KC_RABK,                   KC_LBRC, KC_LPRN, KC_LCBR,KC_UNDS, KC_PPLS, _______,
-  _______, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                   KC_RBRC, KC_RPRN, KC_RCBR,KC_PMNS,  KC_EQL, _______,
-                             KC_LGUI, _______, _______,                    KC_ENT, _______, _______
+  _______, KC_LABK, KC_RABK, KC_LCBR, KC_RCBR, _______,                   KC_PPLS,    KC_7,    KC_8,   KC_9, KC_MINS, _______,
+  _______, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, _______,                    KC_EQL,    KC_4,    KC_5,   KC_6, KC_UNDS, _______,
+  _______, _______, _______, _______, _______, _______,                   _______,    KC_1,    KC_2,   KC_3, _______, _______,
+                             KC_LGUI, _______, _______,                   _______, _______,    KC_0
 ),
-/* MEDIA
+/* MACRO
+ * ->, win+shift+s
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  RST |      |      |      |      |      |                    |      |      |      |      |      | RST  |
+ * |c+a+d |      |      |      |alt+f4|      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |  V+  |      |      |      |      | PrtSc|
+ * |      |  <>  |      |  {}  |      |      |                    |      |      |      |      | "0p  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |  V-  | <<   | play |  >>  |      |      |
+ * |      |  []  |  SS  |  ()  |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    | Mute |      |      |      |      |      |
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * `-----------------------------------------/                    \-----------------------------------------'
  *                   |      |      |      | /                      \  |      |      |      |
  *                   |      |      |      |/                        \ |      |      |      |
  *                   `---------------------                          ''--------------------'
  */
-[_MEDIA] = LAYOUT(
-  QK_BOOT, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, _______, QK_BOOT,
-  _______, _______, _______, _______, _______, _______,                   KC_VOLU, _______, _______,_______, _______, KC_PSCR,
-  _______, _______, _______, _______, _______, _______,                   KC_VOLD, KC_MPRV, KC_MPLY,KC_MNXT, _______, _______,
-  _______, _______, _______, _______, _______, _______,                   KC_MUTE, _______, _______,_______, _______, _______,
+[_MACRO] = LAYOUT(
+  MAC_CADEL, _______, _______, _______, MAC_ALTF4, _______,                   _______, _______, _______, _______, _______, _______,
+  _______, MAC_ABK, _______, MAC_CBR, _______, _______,                   _______, _______, _______, _______, MAC_PASTE, _______,
+  _______, MAC_BRC,MAC_SSHOT,MAC_PRN, _______, _______,                   _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
                              _______, _______, _______,                   _______, _______, _______
 )
 };
 
 // Tri-layer
 layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _NAV, _SYM, _MEDIA);
+  return update_tri_layer_state(state, _SYM, _NAV, _MACRO);
 }
 
 void suspend_power_down_user(void) {
@@ -152,8 +178,6 @@ void housekeeping_task_user(void) {
 static const char PROGMEM windows_logo[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xbc, 0xbc, 0xbe, 0xbe, 0x00, 0xbe, 0xbe, 0xbf, 0xbf, 0xbf, 0xbf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x07, 0x0f, 0x0f, 0x00, 0x0f, 0x0f, 0x1f, 0x1f, 0x1f, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 static const char PROGMEM mac_logo[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0xf0, 0xf8, 0xf8, 0xf8, 0xf0, 0xf6, 0xfb, 0xfb, 0x38, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x07, 0x0f, 0x1f, 0x1f, 0x0f, 0x0f, 0x1f, 0x1f, 0x0f, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-
-#define SLEEP_TIMER 60000 // should sleep after this period of 0 wpm, may need fixing
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   if (!is_keyboard_master())
@@ -296,18 +320,16 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
     }
 
     /* animation timer */
-    if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
+    if (current_wpm > 0) {
+      oled_on();
+      anim_sleep = timer_read32();
+    }
+    if (timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
+      oled_off();
+    } else if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
         anim_timer = timer_read32();
         animate_luna();
     }
-
-    /* this fixes the screen on and off bug */
-    // if (current_wpm > 0) {
-        // oled_on();
-        // anim_sleep = timer_read32();
-    // } else if (timer_elapsed32(anim_sleep) > SLEEP_TIMER) {
-        // oled_off();
-    // }
 }
 
 /* KEYBOARD PET END */
@@ -317,7 +339,7 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 #define POP_IDLE_TIME 800
 
 uint8_t current_idle_frame = 0;
-uint16_t pop_anim_timer = 0;
+uint32_t pop_anim_timer = 0;
 
 /* Render popcat */
 static void render_popcat(void) {
@@ -346,11 +368,15 @@ static void render_popcat(void) {
       oled_write_raw_P(popCat1, sizeof(popCat1));
       last_popcat.pressFlag--;
     }
-    anim_sleep = timer_read();
+    anim_sleep = timer_read32();
   } else {
     // idle
-    if(timer_elapsed(pop_anim_timer) > POP_IDLE_TIME) {
-        pop_anim_timer = timer_read();
+    // if(timer_elapsed32(anim_sleep) > OLED_TIMEOUT) {
+      // oled_off();
+    // } else 
+    if(timer_elapsed32(pop_anim_timer) > POP_IDLE_TIME) {
+        // oled_on();
+        pop_anim_timer = timer_read32();
         current_idle_frame = (current_idle_frame + 1) % 2;
         if (current_idle_frame == 1) {
           oled_write_raw_P(popCat3, sizeof(popCat3));  
@@ -358,10 +384,6 @@ static void render_popcat(void) {
           oled_write_raw_P(popCat1, sizeof(popCat1));
         }         
     }
-
-    // if(timer_elapsed(anim_sleep) > SLEEP_TIMER) {
-        // oled_off();
-    // }
   }
 }
 
@@ -413,6 +435,53 @@ bool oled_task_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    // Macros
+    case MAC_SSHOT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LGUI) SS_DOWN(X_LSFT) SS_TAP(X_S) SS_UP(X_LGUI) SS_UP(X_LSFT));
+      }
+      break;
+    case MAC_PRN:
+      if (record->event.pressed) {
+        SEND_STRING("()" SS_TAP(X_LEFT));
+      }
+      break;
+    case MAC_CBR:
+      if (record->event.pressed) {
+        SEND_STRING("{}" SS_TAP(X_LEFT));
+      }
+      break;
+    case MAC_BRC:
+      if (record->event.pressed) {
+        SEND_STRING("[]" SS_TAP(X_LEFT));
+      }
+      break;
+    case MAC_ABK:
+      if (record->event.pressed) {
+        SEND_STRING("<>" SS_TAP(X_LEFT));
+      }
+      break;
+    case MAC_PASTE:
+      if (record->event.pressed) {
+        SEND_STRING("\"0p");
+      }
+      break;
+    case MAC_CADEL:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_TAP(X_DEL) SS_UP(X_LALT) SS_UP(X_LCTL));
+      }
+      break;
+    case MAC_ALTF4:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_F4) SS_UP(X_LALT));
+      }
+      break;
+    case LT(0,KC_BSPC):
+      if (!record->tap.count && record->event.pressed) { // intercept hold
+        tap_code16(C(KC_BSPC));
+      }
+      break;
+
     /* KEYBOARD PET STATUS START */
     case KC_LCTL:
     case KC_RCTL:
@@ -444,23 +513,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             isBarking = false;
         }
         break;
-
         /* KEYBOARD PET STATUS END */
   }
   
   if (record->event.pressed) {
-    // print("key pressed");
+#ifdef OLED_ENABLE
     // master : store keycode to sent to the other side to be process_key
     if (last_popcat.pressFlag == 0) {
       last_popcat.pressFlag = last_popcat.pressFlag2 = POPTIME;
       b_sync_need_send    = true;
     }
-#ifdef OLED_ENABLE
     set_keylog(keycode, record);
-
-    // if (pressFlag == 0) {
-      // pressFlag = pressFlag2 = POPTIME;
-    // }
 #endif
     // set_timelog();
   }
