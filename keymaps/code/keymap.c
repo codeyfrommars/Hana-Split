@@ -6,6 +6,7 @@
 enum layer_number {
   _QWERTY = 0,
   _GAME,
+  _GAMEALT,
   _NAV,
   _SYM,
   _MACRO,
@@ -55,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  [_QWERTY] = LAYOUT(
   KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,       KC_0,    KC_EQL,
-  MT(MOD_LCTL, KC_TAB),   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+  MT(MOD_LCTL, KC_TAB),   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    MT(MOD_LCTL, KC_BSLS),
   MO(_NAV),  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                    KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, MO(_NAV),
   KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
                           TD(TD_ALT_CTL), MO(_SYM), LT(0,KC_BSPC),                     KC_SPC, MO(_SYM), KC_ESC
@@ -78,13 +79,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  [_GAME] = LAYOUT(
   KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,       KC_0,    KC_EQL,
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
-  MO(_NAV),  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                    KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, MO(_NAV),
+  MO(_GAMEALT),  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                    KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, MO(_NAV),
   KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
                           KC_LCTL, KC_LALT,  KC_SPC,                     KC_SPC, MO(_SYM), KC_ESC
 ),
+/* GAMEALT
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * | Esc  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  +   |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * | Tab  |   Q  |   W  |   E  |   Y  |   U  |                    |   Y  |   U  |   I  |   O  |   P  |  \   |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |   A  |   S  |   D  |   H  |   J  |                    |   H  |   J  |   K  |   L  |   '  |  NAV |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |LShift|   Z  |   X  |   C  |   N  |   M  |                    |   N  |   M  |   ,  |   .  |   /  |RShift|
+ * `-----------------------------------------/                    \-----------------------------------------'
+ *                   |   ,  |   .  | Space| /                      \  |Space | SYM  | Esc  |
+ *                   |      |      |      |/                        \ |      |      |      |
+ *                   `---------------------                          ''--------------------'
+ */
+
+ [_GAMEALT] = LAYOUT(
+  KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,       KC_0,    KC_EQL,
+  KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_Y,    KC_U,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+  _______,  KC_A,   KC_S,    KC_D,    KC_H,    KC_J,                     KC_H,    KC_J,    KC_K,    KC_L,    KC_QUOT, MO(_NAV),
+  KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_N,    KC_M,                     KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+                          KC_COMM, KC_DOT,  KC_SPC,                     KC_SPC, MO(_SYM), KC_ESC
+),
 /* NAV
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * | RST  |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |  V+  |      |      |                    | Home | PgDn | PgUp | End  |      |PrtSc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -97,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `---------------------                          ''--------------------'
  */
 [_NAV] = LAYOUT(
-  QK_BOOT, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, _______, _______,
+  _______, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, _______, _______,
   _______, _______, _______, KC_VOLU, _______, _______,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END, _______, KC_PSCR,
   _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______,                   KC_LEFT, KC_DOWN,   KC_UP,KC_RGHT, KC_SCLN, _______,
   _______, _______, _______, KC_VOLD, _______, _______,                   _______, _______, _______,_______, _______, _______,
@@ -128,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* MACRO
  * ->, win+shift+s
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |c+a+d |      |      |      |alt+f4|      |                    |      |      |      |      |      |      |
+ * | RST  |      |      |      |alt+f4|      |                    |      |      |      |      |      |c+a+d |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |  <>  |  ->  |  {}  |      |      |                    |      |      |      |      | "0p  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -141,7 +164,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   `---------------------                          ''--------------------'
  */
 [_MACRO] = LAYOUT(
-  MAC_CADEL, _______, _______, _______, MAC_ALTF4, _______,                   _______, _______, _______, _______, _______, _______,
+  QK_BOOT, _______, _______, _______, MAC_ALTF4, _______,                   _______, _______, _______, _______, _______, MAC_CADEL,
   _______, MAC_ABK, MAC_ARROW, MAC_CBR, _______, _______,                   _______, _______, _______, _______, MAC_PASTE, _______,
   _______, MAC_BRC,MAC_SSHOT,MAC_PRN, _______, TG(_GAME),                   _______, _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
